@@ -215,6 +215,8 @@ const TIERS = [
 let answers = [], qIndex = 0;
 const app = document.getElementById("app");
 const fb = (...a) => { try { if (window.fbq) fbq(...a); } catch (e) {} };
+/* Google Sheet endpoint — paste your Apps Script Web App /exec URL here */
+const SHEET_ENDPOINT = "https://script.google.com/macros/s/AKfycbzF8_HrXzC-EeL-Dft_Y2Uagjc4zTKC12JoJMQwWeJ1ct4Geo4LQvAzQe5PkWkAiPp37w/exec";
 const scoreTotal = () => answers.reduce((s, v) => s + (v || 0), 0);
 const tierFor = s => TIERS.find(t => s >= t.min && s <= t.max);
 
@@ -313,7 +315,14 @@ function renderEmail() {
     err.textContent = "";
     const lead = { ...v, score: scoreTotal(), tier: tierFor(scoreTotal()).name };
     fb('track','Lead',{ content_name:'AI Readiness Test for HR', content_category:'HR', status:lead.tier, score:lead.score });
-    /* >>> WIRE TO YOUR EMAIL/CRM: POST `lead` (name, email, phone, title, org, score, tier) to your endpoint / webhook <<< */
+    if (SHEET_ENDPOINT.indexOf("http") === 0) {
+      fetch(SHEET_ENDPOINT, {
+        method: "POST",
+        mode: "no-cors",
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: JSON.stringify(lead)
+      }).catch(() => {});
+    }
     renderResult();
   };
   document.getElementById("reveal").onclick = submit;
