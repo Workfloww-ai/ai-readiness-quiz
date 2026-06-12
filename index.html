@@ -4,6 +4,23 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>The AI Readiness Test for HR — workfloww.ai</title>
+<!-- Meta Pixel Code -->
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '1571893287881952');
+fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none"
+src="https://www.facebook.com/tr?id=1571893287881952&ev=PageView&noscript=1"
+/></noscript>
+<!-- End Meta Pixel Code -->
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Newsreader:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet" />
@@ -197,6 +214,7 @@ const TIERS = [
 /* ---------- STATE ---------- */
 let answers = [], qIndex = 0;
 const app = document.getElementById("app");
+const fb = (...a) => { try { if (window.fbq) fbq(...a); } catch (e) {} };
 const scoreTotal = () => answers.reduce((s, v) => s + (v || 0), 0);
 const tierFor = s => TIERS.find(t => s >= t.min && s <= t.max);
 
@@ -214,7 +232,7 @@ function renderIntro() {
     </div>
     <button class="btn btn-primary" id="start">Begin the assessment &rarr;</button>
   `;
-  document.getElementById("start").onclick = () => { qIndex = 0; answers = []; renderQuestion(); };
+  document.getElementById("start").onclick = () => { fb('trackCustom','QuizStarted'); qIndex = 0; answers = []; renderQuestion(); };
 }
 
 function renderQuestion() {
@@ -294,6 +312,7 @@ function renderEmail() {
     }
     err.textContent = "";
     const lead = { ...v, score: scoreTotal(), tier: tierFor(scoreTotal()).name };
+    fb('track','Lead',{ content_name:'AI Readiness Test for HR', content_category:'HR', status:lead.tier, score:lead.score });
     /* >>> WIRE TO YOUR EMAIL/CRM: POST `lead` (name, email, phone, title, org, score, tier) to your endpoint / webhook <<< */
     renderResult();
   };
@@ -322,7 +341,7 @@ function renderResult() {
     if (p < 1) requestAnimationFrame(tick);
   })(start);
   /* >>> POINT THIS AT YOUR OFFER (registration / sales page / booking link) <<< */
-  document.getElementById("cta").onclick = () => { window.location.href = "#your-offer-url"; };
+  document.getElementById("cta").onclick = () => { fb('track','InitiateCheckout'); window.location.href = "#your-offer-url"; };
   document.getElementById("again").onclick = renderIntro;
 }
 
