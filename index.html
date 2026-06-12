@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>The AI Readiness Test for HR — workfloww.ai</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Newsreader:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --white: #ffffff;
+    --muted: #b0aec3;
+    --faint: rgba(255,255,255,0.30);
+    --peri: #8691fd;     /* emphasis / italic / score / labels */
+    --purple: #6357d4;
+    --blue: #1f6bf5;     /* action / CTA / progress */
+    --hairline: rgba(255,255,255,0.10);
+    --surface: rgba(255,255,255,0.035);
+    --tile: rgba(134,145,253,0.14);
+    --tile-bd: rgba(134,145,253,0.40);
+    --font-sans: 'DM Sans', ui-sans-serif, system-ui, sans-serif;
+    --font-serif: 'Newsreader', Georgia, serif;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { min-height: 100%; }
+  body {
+    background:
+      radial-gradient(680px 360px at 50% -6%, rgba(72,66,168,0.40), transparent 62%),
+      linear-gradient(180deg, #1c1c40 0%, #14132b 34%, #0b0a16 72%, #08080f 100%);
+    background-attachment: fixed;
+    font-family: var(--font-sans);
+    color: var(--white);
+    -webkit-font-smoothing: antialiased;
+    -webkit-text-size-adjust: 100%;
+    min-height: 100vh;
+    display: flex; justify-content: center;
+    padding: 28px 20px;
+  }
+  ::selection { background: var(--blue); color: #fff; }
+
+  .frame { width: 100%; max-width: 460px; margin: auto; display: flex; flex-direction: column; }
+
+  /* header */
+  .head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 30px; }
+  .logo { display: flex; align-items: center; gap: 9px; }
+  .logo img { height: 26px; width: auto; display: block; }
+  .logo .wm { font-weight: 700; font-size: 18px; color: var(--white); letter-spacing: -0.01em; }
+  .badge {
+    font-size: 10.5px; font-weight: 500; color: rgba(255,255,255,0.82);
+    border: 1px solid var(--hairline); background: rgba(255,255,255,0.04);
+    border-radius: 999px; padding: 6px 12px; white-space: nowrap; letter-spacing: 0.01em;
+  }
+
+  main { flex: 1 1 auto; }
+
+  .label { display: block; font-weight: 500; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--peri); }
+
+  /* intro */
+  .hero { font-family: var(--font-serif); font-weight: 400; color: var(--white);
+          font-size: clamp(32px, 9vw, 44px); line-height: 1.1; letter-spacing: -0.01em; margin-top: 16px; }
+  .hero em { font-style: italic; font-weight: 400; color: var(--peri); }
+  .sub { color: var(--muted); font-size: 16px; line-height: 1.62; margin-top: 18px; }
+  .meta { display: flex; flex-wrap: wrap; gap: 10px 18px; margin-top: 26px; }
+  .meta span { font-size: 13px; color: var(--muted); font-weight: 500; display: inline-flex; align-items: center; gap: 8px; }
+  .meta i { width: 5px; height: 5px; border-radius: 50%; background: var(--peri); flex: none; }
+
+  /* buttons */
+  .btn {
+    appearance: none; border: none; cursor: pointer; width: 100%;
+    font-family: var(--font-sans); font-weight: 700; font-size: 16px;
+    color: #fff; background: var(--blue); border-radius: 999px; padding: 17px 24px; line-height: 1.2;
+    transition: filter .18s ease, transform .12s ease, box-shadow .2s ease;
+    box-shadow: 0 0 0 1px rgba(120,150,255,0.25), 0 14px 40px -8px rgba(31,107,245,0.6);
+  }
+  .btn:hover { filter: brightness(1.08); transform: translateY(-1px); box-shadow: 0 0 0 1px rgba(120,150,255,0.4), 0 18px 50px -8px rgba(31,107,245,0.75); }
+  .btn:active { transform: translateY(0); }
+  .btn-primary { margin-top: 30px; }
+  .btn.ghost { background: transparent; color: var(--muted); box-shadow: none; font-weight: 500; font-size: 14px; padding: 14px; margin-top: 4px; }
+  .btn.ghost:hover { color: var(--white); filter: none; transform: none; }
+
+  /* progress */
+  .phead { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 13px; }
+  .phead .lbl { font-size: 11px; font-weight: 500; letter-spacing: 0.13em; text-transform: uppercase; color: var(--muted); }
+  .phead .lbl b { color: var(--white); font-weight: 700; }
+  .bar { height: 4px; background: rgba(255,255,255,0.10); border-radius: 999px; overflow: hidden; }
+  .bar > i { display: block; height: 100%; width: 0%; background: var(--blue); border-radius: 999px;
+             box-shadow: 0 0 12px rgba(31,107,245,0.7); transition: width .45s cubic-bezier(.2,.7,.2,1); }
+
+  .qtext { font-weight: 700; color: var(--white); font-size: clamp(21px, 6vw, 27px); line-height: 1.28; letter-spacing: -0.01em; margin: 28px 0 24px; }
+
+  .opt {
+    display: flex; align-items: center; gap: 14px; width: 100%; text-align: left; cursor: pointer;
+    background: var(--surface); border: 1px solid var(--hairline); border-radius: 14px; padding: 16px;
+    margin-bottom: 11px; transition: border-color .14s ease, background .14s ease, transform .14s ease;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .opt:active { transform: scale(0.99); }
+  @media (hover: hover) { .opt:hover { border-color: var(--peri); background: rgba(134,145,253,0.10); } }
+  .opt .k { flex: none; width: 32px; height: 32px; border-radius: 9px; background: var(--tile); border: 1px solid var(--tile-bd);
+            color: var(--peri); font-weight: 700; font-size: 13px; display: flex; align-items: center; justify-content: center; }
+  .opt .t { font-size: 15.5px; color: #eef0f8; font-weight: 500; line-height: 1.35; }
+
+  /* email */
+  .field {
+    width: 100%; font-family: var(--font-sans); font-size: 16px; color: var(--white);
+    background: rgba(255,255,255,0.04); border: 1px solid var(--hairline); border-radius: 12px;
+    padding: 16px; margin-top: 24px; outline: none; transition: border-color .15s ease, box-shadow .15s ease;
+  }
+  .field:focus { border-color: var(--blue); box-shadow: 0 0 0 4px rgba(31,107,245,0.18); }
+  .field::placeholder { color: rgba(255,255,255,0.4); }
+  .form { display: grid; gap: 12px; margin-top: 22px; }
+  .form .field { margin-top: 0; }
+  .formerr { color: #ffb38a; font-size: 13px; font-weight: 500; margin-top: 12px; min-height: 1px; }
+
+  .checks { list-style: none; margin-top: 24px; display: grid; gap: 14px; }
+  .checks li { display: flex; gap: 12px; align-items: flex-start; font-size: 15px; color: #eef0f8; font-weight: 500; line-height: 1.45; }
+  .checks .ck { flex: none; width: 26px; height: 26px; border-radius: 7px; background: var(--tile); border: 1px solid var(--tile-bd);
+                color: var(--peri); font-size: 13px; display: flex; align-items: center; justify-content: center; }
+
+  .fineprint { font-size: 12.5px; color: var(--muted); margin-top: 16px; line-height: 1.55; }
+
+  /* result */
+  .res { text-align: center; }
+  .score { font-weight: 700; color: var(--peri); font-size: clamp(86px, 30vw, 124px); line-height: 0.9; letter-spacing: -0.04em; margin-top: 18px;
+           text-shadow: 0 0 50px rgba(134,145,253,0.4); }
+  .score .slash { color: var(--muted); font-size: 0.3em; vertical-align: super; text-shadow: none; }
+  .pill { display: inline-flex; align-items: center; gap: 9px; margin-top: 20px; font-weight: 700; font-size: 12px;
+          letter-spacing: 0.14em; text-transform: uppercase; color: #fff;
+          padding: 8px 15px; border-radius: 999px; border: 1px solid var(--hairline); background: rgba(255,255,255,0.04); }
+  .pill i { width: 8px; height: 8px; border-radius: 50%; flex: none; }
+  .res-serif { font-family: var(--font-serif); font-weight: 400; color: var(--white);
+               font-size: clamp(25px, 6.4vw, 31px); line-height: 1.18; margin: 24px auto 0; max-width: 360px; }
+  .res-serif em { font-style: italic; color: var(--peri); }
+  .verdict { color: var(--muted); font-size: 15.5px; line-height: 1.65; margin: 18px auto 0; max-width: 380px; }
+  .verdict b { color: #9fb4ff; font-weight: 700; }
+  .res .btn-primary { margin-top: 34px; }
+
+  /* footer */
+  .foot { color: var(--faint); font-size: 10.5px; letter-spacing: 0.18em; text-transform: uppercase; text-align: center;
+          line-height: 1.5; margin-top: 34px; padding-top: 4px; }
+
+  .fade { animation: fade .42s ease both; }
+  @keyframes fade { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+</style>
+</head>
+<body>
+  <div class="frame">
+    <header class="head">
+      <span class="logo"><img src="data:image/png;base64,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" alt="workfloww.ai" /><span class="wm">workfloww.ai</span></span>
+      <span class="badge">AI MetaMind &middot; HR Series</span>
+    </header>
+    <main id="app"></main>
+    <div class="foot">For HR professionals who refuse to fall behind.</div>
+  </div>
+
+<script>
+/* ---------- DATA (HR-specific) ---------- */
+const QUESTIONS = [
+  { q: "How often do you use AI in your HR work \u2014 JDs, screening, policies, comms?",
+    a: [["Never", 0], ["Tried it once or twice", 3], ["A few times a month", 6], ["Weekly", 8], ["Every day", 10]] },
+  { q: "Could you name 3 HR tasks AI could take off your plate this week?",
+    a: [["No idea", 0], ["Maybe one", 4], ["Two or three", 7], ["I already automate them", 10]] },
+  { q: "How do you write job descriptions and offer letters?",
+    a: [["From scratch every time", 0], ["I reuse old templates", 4], ["AI draft, then I edit", 7], ["Fully systemised with AI", 10]] },
+  { q: "Faced with a stack of 200 r\u00e9sum\u00e9s, you\u2026",
+    a: [["Read each one manually", 0], ["Skim them manually", 3], ["Lean on ATS keyword filters", 6], ["Use AI to shortlist & summarise", 10]] },
+  { q: "How would you rate your prompting skill for HR tasks?",
+    a: [["What's a prompt?", 0], ["I type basic questions", 4], ["I write detailed prompts", 7], ["I reuse a prompt library", 10]] },
+  { q: "Drafting a policy or a sensitive employee email\u2026",
+    a: [["Takes me hours from scratch", 0], ["I adapt old documents", 4], ["AI first draft, I refine", 7], ["Done in minutes with AI", 10]] },
+  { q: "Do you know how AI is reshaping HR roles at other companies?",
+    a: [["No clue", 0], ["Heard things", 3], ["Somewhat", 6], ["I track it closely", 10]] },
+  { q: "Have you used AI to read people data \u2014 engagement, attrition, comp?",
+    a: [["Never", 0], ["A bit", 4], ["A few times", 7], ["Regularly", 10]] },
+  { q: "Do you have a system to stay current as HR-AI tools change?",
+    a: [["No", 0], ["I catch headlines", 3], ["I follow a few sources", 6], ["A structured routine", 10]] },
+  { q: "If leadership asked you to run HR with a leaner team using AI next quarter, could you?",
+    a: [["Definitely not", 0], ["Doubtful", 3], ["Maybe", 6], ["Yes, comfortably", 10]] },
+];
+
+const TIERS = [
+  { min: 0,  max: 30,  name: "At Risk",          dot: "#ea8c2b",
+    head: "You're Closer to the <em>Edge</em> Than You Think.",
+    verdict: "You're in the danger zone, and the gap <b>compounds every month</b> you wait. The one good thing: this is the easiest it will ever be to catch up \u2014 the right system turns it around fast." },
+  { min: 31, max: 60,  name: "Falling Behind",    dot: "#ea8c2b",
+    head: "The Gap Is Opening \u2014 <em>Fast.</em>",
+    verdict: "You've dabbled, but dabbling won't hold your ground. You're <b>one AI-fluent colleague away</b> from looking replaceable. A focused few weeks would put you ahead of most HR pros who took this test." },
+  { min: 61, max: 85,  name: "Keeping Pace",      dot: "#1f6bf5",
+    head: "You're Ahead. <em>For Now.</em>",
+    verdict: "You're ahead of most HR teams \u2014 but \u201cmost\u201d is a low bar in 2026, and it's rising. <b>Don't let this lead quietly slip.</b> The difference now is depth, not awareness." },
+  { min: 86, max: 100, name: "Ahead of the Curve", dot: "#16a34a",
+    head: "You're Ahead of <em>Almost Everyone.</em>",
+    verdict: "Rare \u2014 you're in the top tier of HR. The uncomfortable part: <b>this edge closes in months, not years.</b> Staying ahead is a different game than getting here, and most people lose it." },
+];
+
+/* ---------- STATE ---------- */
+let answers = [], qIndex = 0;
+const app = document.getElementById("app");
+const scoreTotal = () => answers.reduce((s, v) => s + (v || 0), 0);
+const tierFor = s => TIERS.find(t => s >= t.min && s <= t.max);
+
+/* ---------- SCREENS ---------- */
+function renderIntro() {
+  app.className = "fade";
+  app.innerHTML = `
+    <span class="label">AI Readiness Assessment &middot; For HR</span>
+    <h1 class="hero">How Far Behind Are You, <em>Really?</em></h1>
+    <p class="sub">Most HR professionals overestimate where they stand on AI \u2014 by a lot. This 10-question assessment gives you one honest number, and shows what it means for your role over the next 12 months.</p>
+    <div class="meta">
+      <span><i></i> 10 questions</span>
+      <span><i></i> ~2 minutes</span>
+      <span><i></i> Scored 0&ndash;100</span>
+    </div>
+    <button class="btn btn-primary" id="start">Begin the assessment &rarr;</button>
+  `;
+  document.getElementById("start").onclick = () => { qIndex = 0; answers = []; renderQuestion(); };
+}
+
+function renderQuestion() {
+  const item = QUESTIONS[qIndex];
+  const pct = Math.round(qIndex / QUESTIONS.length * 100);
+  const keys = ["A","B","C","D","E"];
+  app.className = "fade";
+  app.innerHTML = `
+    <div class="phead">
+      <span class="lbl">Question <b>${String(qIndex+1).padStart(2,"0")}</b> / ${QUESTIONS.length}</span>
+      <span class="lbl">${pct}% complete</span>
+    </div>
+    <div class="bar"><i></i></div>
+    <div class="qtext">${item.q}</div>
+    <div id="opts">
+      ${item.a.map((o,i)=>`<button class="opt" data-pts="${o[1]}"><span class="k">${keys[i]}</span><span class="t">${o[0]}</span></button>`).join("")}
+    </div>
+  `;
+  requestAnimationFrame(() => { app.querySelector(".bar > i").style.width = pct + "%"; });
+  app.querySelectorAll(".opt").forEach(btn => {
+    btn.onclick = () => {
+      answers[qIndex] = parseInt(btn.dataset.pts, 10);
+      qIndex++;
+      (qIndex < QUESTIONS.length) ? renderQuestion() : renderEmail();
+    };
+  });
+}
+
+function renderEmail() {
+  app.className = "fade";
+  app.innerHTML = `
+    <div class="phead"><span class="lbl">Assessment complete</span><span class="lbl">100%</span></div>
+    <div class="bar"><i></i></div>
+    <div class="qtext" style="margin-top:28px;">Your score is ready.</div>
+    <p class="sub" style="margin-top:12px;">Tell us where to send it \u2014 and unlock the full breakdown of where you're most exposed and what to fix first.</p>
+    <div class="form">
+      <input class="field" id="f_name"  type="text"  placeholder="Full name"        autocomplete="name" />
+      <input class="field" id="f_email" type="email" placeholder="Work email"        autocomplete="email" inputmode="email" />
+      <input class="field" id="f_phone" type="tel"   placeholder="Phone number"      autocomplete="tel" inputmode="tel" />
+      <input class="field" id="f_title" type="text"  placeholder="Job title"         autocomplete="organization-title" />
+      <input class="field" id="f_org"   type="text"  placeholder="Organisation name" autocomplete="organization" />
+    </div>
+    <p class="formerr" id="formerr"></p>
+    <button class="btn btn-primary" id="reveal" style="margin-top:8px;">Reveal my score &rarr;</button>
+    <p class="fineprint">All fields required. We'll send your report and occasional updates from workfloww.ai. Unsubscribe anytime.</p>
+  `;
+  const F = {
+    name:  document.getElementById("f_name"),
+    email: document.getElementById("f_email"),
+    phone: document.getElementById("f_phone"),
+    title: document.getElementById("f_title"),
+    org:   document.getElementById("f_org"),
+  };
+  const err = document.getElementById("formerr");
+  Object.values(F).forEach(el => el.addEventListener("input", () => { el.style.borderColor = ""; }));
+
+  const submit = () => {
+    const v = {
+      name:  F.name.value.trim(),
+      email: F.email.value.trim(),
+      phone: F.phone.value.trim(),
+      title: F.title.value.trim(),
+      org:   F.org.value.trim(),
+    };
+    const bad = [];
+    if (v.name.length < 2) bad.push(F.name);
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.email)) bad.push(F.email);
+    if (v.phone.replace(/[^0-9]/g, "").length < 7) bad.push(F.phone);
+    if (v.title.length < 2) bad.push(F.title);
+    if (v.org.length < 2) bad.push(F.org);
+
+    if (bad.length) {
+      bad.forEach(el => el.style.borderColor = "#ea8c2b");
+      err.textContent = "Please complete every field with valid details.";
+      bad[0].focus();
+      return;
+    }
+    err.textContent = "";
+    const lead = { ...v, score: scoreTotal(), tier: tierFor(scoreTotal()).name };
+    /* >>> WIRE TO YOUR EMAIL/CRM: POST `lead` (name, email, phone, title, org, score, tier) to your endpoint / webhook <<< */
+    renderResult();
+  };
+  document.getElementById("reveal").onclick = submit;
+  Object.values(F).forEach(el => el.addEventListener("keydown", e => { if (e.key === "Enter") submit(); }));
+}
+
+function renderResult() {
+  const total = scoreTotal(), tier = tierFor(total);
+  app.className = "fade";
+  app.innerHTML = `
+    <div class="res">
+      <span class="label">Your AI Readiness Score</span>
+      <div class="score"><span id="num">0</span><span class="slash">/100</span></div>
+      <span class="pill"><i style="background:${tier.dot}"></i>${tier.name}</span>
+      <div class="res-serif">${tier.head}</div>
+      <p class="verdict">${tier.verdict}</p>
+      <button class="btn btn-primary" id="cta">Reserve your seat &rarr;</button>
+      <button class="btn ghost" id="again">Retake the test</button>
+    </div>
+  `;
+  const numEl = document.getElementById("num"), dur = 1100, start = performance.now();
+  (function tick(now){
+    const p = Math.min((now - start) / dur, 1);
+    numEl.textContent = Math.round((1 - Math.pow(1 - p, 3)) * total);
+    if (p < 1) requestAnimationFrame(tick);
+  })(start);
+  /* >>> POINT THIS AT YOUR OFFER (registration / sales page / booking link) <<< */
+  document.getElementById("cta").onclick = () => { window.location.href = "#your-offer-url"; };
+  document.getElementById("again").onclick = renderIntro;
+}
+
+renderIntro();
+</script>
+</body>
+</html>
